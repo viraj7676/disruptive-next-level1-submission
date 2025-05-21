@@ -14,6 +14,31 @@ import {
 import { cn } from "@/lib/utils";
 import { HtmlResource } from "@mcp-ui/client";
 
+// Define interfaces for better type safety
+interface HtmlResourceData {
+  uri: string;
+  mimeType: "text/html";
+  text?: string;
+  blob?: string;
+  [key: string]: any; // Allow other fields, like id from example
+}
+
+interface ContentItemWithHtmlResource {
+  type: "resource";
+  resource: HtmlResourceData;
+}
+
+// Generic content item
+interface ContentItem {
+  type: string;
+  [key: string]: any;
+}
+
+// Expected structure of the parsed result string
+interface ParsedResultContainer {
+  content: ContentItem[];
+}
+
 interface ToolInvocationProps {
   toolName: string;
   state: string;
@@ -32,15 +57,27 @@ export function ToolInvocation({
   status,
 }: ToolInvocationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [formattedResult, setFormattedResult] = useState<{ type: string, resource: { mimeType: string } }>();
+  const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
   useEffect(() => {
-        if (typeof result === "string") {
-          const parsed = JSON.parse(result).catch((error: any) => {
-            console.error(error);
-          });
-          setFormattedResult(parsed.content);
+    setHtmlResourceContents([]);
+    if (typeof result === "string" && result.trim().startsWith("{")) {
+      try {
+        const parsedContainer: ParsedResultContainer = JSON.parse(result);
+        if (parsedContainer && Array.isArray(parsedContainer.content)) {
+          const resources = parsedContainer.content
+            .filter(
+              (item): item is ContentItemWithHtmlResource => // Type guard
+                item.type === "resource" &&
+                item.resource?.mimeType === "text/html"
+            )
+            .map((item) => item.resource);
+          setHtmlResourceContents(resources);
         }
+      } catch (error) {
+        console.error("Failed to parse result content for HtmlResource:", error);
+      }
+    }
   }, [result]);
   
   const getStatusIcon = () => {
@@ -140,26 +177,28 @@ export function ToolInvocation({
                 <ArrowRight className="h-3 w-3" />
                 <span className="font-medium">Result</span>
               </div>
-              {!!formattedResult && formattedResult.type === "resource" &&
-              formattedResult?.resource?.mimeType === "text/html" ? (
-                <HtmlResource
-                  resource={formattedResult.resource}
-                  onUiAction={async (tool, params) => {
-                    console.log("Action:", tool, params);
-                    // You might want to dispatch this action to your agent or MCP host
-                    return Promise.resolve({ status: "ok" });
-                  }}
-                />
-              ) : (
-                <pre
-                  className={cn(
-                    "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
-                    "border border-border/40 bg-muted/10"
-                  )}
-                >
-                  {formatContent(result)}
-                </pre>
-              )}
+
+              {htmlResourceContents.length > 0 &&
+                htmlResourceContents.map((resourceData, index) => (
+                  <HtmlResource
+                    key={resourceData.uri || `html-resource-${index}`}
+                    resource={resourceData}
+                    onUiAction={async (tool, params) => {
+                      console.log("Action:", tool, params);
+                      // You might want to dispatch this action to your agent or MCP host
+                      return Promise.resolve({ status: "ok" });
+                    }}
+                  />
+                ))}
+
+              <pre
+                className={cn(
+                  "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
+                  "border border-border/40 bg-muted/10"
+                )}
+              >
+                {formatContent(result)}
+              </pre>
             </div>
           )}
         </div>
