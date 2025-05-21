@@ -39,7 +39,7 @@ export function ToolInvocation({
           const parsed = JSON.parse(result).catch((error: any) => {
             console.error(error);
           });
-          setFormattedResult(parsed);
+          setFormattedResult(parsed.content);
         }
   }, [result]);
   
