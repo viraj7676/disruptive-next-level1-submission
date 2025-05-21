@@ -12,6 +12,7 @@ import {
   Circle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HtmlResource } from "@mcp-ui/client";
 
 interface ToolInvocationProps {
   toolName: string;
@@ -55,6 +56,9 @@ export function ToolInvocation({
   const formatContent = (content: any): string => {
     try {
       if (typeof content === "string") {
+        if (!content.trim().startsWith("{") && !content.trim().startsWith("[")) {
+          return content;
+        }
         try {
           const parsed = JSON.parse(content);
           return JSON.stringify(parsed, null, 2);
@@ -126,12 +130,26 @@ export function ToolInvocation({
                 <ArrowRight className="h-3 w-3" />
                 <span className="font-medium">Result</span>
               </div>
-              <pre className={cn(
-                "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
-                "border border-border/40 bg-muted/10"
-              )}>
-                {formatContent(result)}
-              </pre>
+              {result?.type === "resource" &&
+              result?.resource?.mimeType === "text/html" ? (
+                <HtmlResource
+                  resource={result.resource}
+                  onUiAction={async (tool, params) => {
+                    console.log("Action:", tool, params);
+                    // You might want to dispatch this action to your agent or MCP host
+                    return Promise.resolve({ status: "ok" });
+                  }}
+                />
+              ) : (
+                <pre
+                  className={cn(
+                    "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
+                    "border border-border/40 bg-muted/10"
+                  )}
+                >
+                  {formatContent(result)}
+                </pre>
+              )}
             </div>
           )}
         </div>
