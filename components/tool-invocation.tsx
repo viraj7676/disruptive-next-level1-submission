@@ -202,7 +202,7 @@ export function ToolInvocation({
                     key={resourceData.uri || `html-resource-${index}`}
                     resource={resourceData}
                     style={{
-                      minHeight: 500,
+                      minHeight: 425,
                     }}
                     onUiAction={async (tool, params) => {
                       console.log("Action:", tool, params);
