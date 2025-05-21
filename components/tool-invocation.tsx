@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { HtmlResource } from "@mcp-ui/client";
-import type { UseChatHelpers } from "@ai-sdk/react";
+import type { UseChatHelpers, Message as TMessage } from "@ai-sdk/react";
+import { nanoid } from "nanoid";
 
 // Define interfaces for better type safety
 interface HtmlResourceData {
@@ -47,8 +48,7 @@ interface ToolInvocationProps {
   result: any;
   isLatestMessage: boolean;
   status: string;
-  setInput?: UseChatHelpers['setInput'];
-  handleSubmit?: UseChatHelpers['handleSubmit'];
+  append?: UseChatHelpers['append'];
 }
 
 export function ToolInvocation({
@@ -58,8 +58,7 @@ export function ToolInvocation({
   result,
   isLatestMessage,
   status,
-  setInput,
-  handleSubmit,
+  append,
 }: ToolInvocationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
@@ -210,25 +209,24 @@ export function ToolInvocation({
                       minHeight: 425,
                     }}
                     onUiAction={async (toolCallName, toolCallParams) => {
-                      if (setInput && handleSubmit) {
-                        const userInputText = `Run tool ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
-                        setInput(userInputText);
+                      if (append) {
+                        const userMessageContent = `Run tool ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
                         
-                        // handleSubmit might need a form event or be callable without arguments
-                        // depending on the exact version/implementation of useChat.
-                        // If it requires an event, a mock event can be created.
-                        // For now, assuming it can be called directly or with a simple event-like object.
-                        // Creating a synthetic event to be safe, as handleSubmit often expects one.
-                        const syntheticEvent = new Event('submit', { bubbles: true, cancelable: true });
-                        // Or, more simply for some versions:
-                        // handleSubmit(); 
-                        // Or pass a simple object if that's what your handleSubmit expects when called programmatically
-                        handleSubmit(syntheticEvent as any); // Cast as any if handleSubmit has complex event type
+                        // Construct the message object for append
+                        // Ensure TMessage is available or use a compatible structure for CreateMessage
+                        const newMessage: TMessage = {
+                          id: nanoid(), // nanoid needs to be imported if not already
+                          role: 'user',
+                          content: userMessageContent,
+                          // parts: [{ type: 'text', text: userMessageContent }] // if parts structure is preferred by your setup
+                        };
+
+                        append(newMessage);
                         
-                        return Promise.resolve({ status: "ok", message: "Tool execution requested via input" });
+                        return Promise.resolve({ status: "ok", message: "Tool execution requested via append" });
                       } else {
-                        console.warn("setInput or handleSubmit not available in ToolInvocation for UI action");
-                        return Promise.resolve({ status: "error", message: "Chat context not available for UI action" });
+                        console.warn("append function not available in ToolInvocation for UI action");
+                        return Promise.resolve({ status: "error", message: "Chat context (append) not available for UI action" });
                       }
                     }}
                   />

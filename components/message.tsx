@@ -121,15 +121,13 @@ const PurePreviewMessage = ({
   message,
   isLatestMessage,
   status,
-  setInput,
-  handleSubmit
+  append,
 }: {
   message: TMessage;
   isLoading: boolean;
   status: "error" | "submitted" | "streaming" | "ready";
   isLatestMessage: boolean;
-  setInput: UseChatHelpers['setInput'];
-  handleSubmit: UseChatHelpers['handleSubmit'];
+  append: UseChatHelpers['append'];
 }) => {
   const getMessageText = () => {
     if (!message.parts) return "";
@@ -187,8 +185,7 @@ const PurePreviewMessage = ({
                     result={result}
                     isLatestMessage={isLatestMessage}
                     status={status}
-                    setInput={setInput}
-                    handleSubmit={handleSubmit}
+                    append={append}
                   />
                 );
               case "reasoning":
@@ -224,6 +221,7 @@ export const Message = memo(PurePreviewMessage, (prevProps, nextProps) => {
   if (prevProps.status !== nextProps.status) return false;
   if (prevProps.isLoading !== nextProps.isLoading) return false;
   if (prevProps.isLatestMessage !== nextProps.isLatestMessage) return false;
+  if (prevProps.append !== nextProps.append) return false;
   if (prevProps.message.annotations !== nextProps.message.annotations) return false;
   if (prevProps.message.id !== nextProps.message.id) return false;
   if (!equal(prevProps.message.parts, nextProps.message.parts)) return false;
