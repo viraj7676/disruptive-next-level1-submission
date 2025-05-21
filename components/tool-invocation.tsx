@@ -61,10 +61,11 @@ export function ToolInvocation({
 
   useEffect(() => {
     console.log('result', result);
-    setHtmlResourceContents([]);
-    if (typeof result === "string" && result.trim().startsWith("{")) {
+    if (typeof result === "string") {
       try {
+        console.log('is string');
         const parsedContainer: ParsedResultContainer = JSON.parse(result);
+        console.log('parsedContainer', parsedContainer);
         if (parsedContainer && Array.isArray(parsedContainer.content)) {
           const resources = parsedContainer.content
             .filter(
