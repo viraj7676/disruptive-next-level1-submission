@@ -103,7 +103,7 @@ export default function Chat() {
     } as Message));
   }, [chatData]);
   
-  const { messages, input, handleInputChange, handleSubmit, status, stop } =
+  const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
       id: chatId || generatedChatId, // Use generated ID if no chatId in URL
       initialMessages,
@@ -175,7 +175,7 @@ export default function Chat() {
       ) : (
         <>
           <div className="flex-1 overflow-y-auto min-h-0 pb-2">
-            <Messages messages={messages} isLoading={isLoading} status={status} />
+            <Messages messages={messages} isLoading={isLoading} status={status}setInput={setInput} handleSubmit={handleSubmit} />
           </div>
           <form
             onSubmit={handleFormSubmit}

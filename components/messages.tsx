@@ -1,4 +1,5 @@
 import type { Message as TMessage } from "ai";
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { Message } from "./message";
 import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom";
 
@@ -6,10 +7,14 @@ export const Messages = ({
   messages,
   isLoading,
   status,
+  setInput,
+  handleSubmit,
 }: {
   messages: TMessage[];
   isLoading: boolean;
   status: "error" | "submitted" | "streaming" | "ready";
+  setInput: UseChatHelpers['setInput'];
+  handleSubmit: UseChatHelpers['handleSubmit'];
 }) => {
   const [containerRef, endRef] = useScrollToBottom();
   
@@ -26,6 +31,8 @@ export const Messages = ({
             isLoading={isLoading}
             message={m}
             status={status}
+            setInput={setInput}
+            handleSubmit={handleSubmit}
           />
         ))}
         <div className="h-1" ref={endRef} />

@@ -1,11 +1,12 @@
 "use client";
 
 import type { Message as TMessage } from "ai";
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import equal from "fast-deep-equal";
 import { Markdown } from "./markdown";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon, ChevronUpIcon, LightbulbIcon, BrainIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, LightbulbIcon } from "lucide-react";
 import { SpinnerIcon } from "./icons";
 import { ToolInvocation } from "./tool-invocation";
 import { CopyButton } from "./copy-button";
@@ -49,7 +50,7 @@ export function ReasoningMessagePart({
           <div className="text-xs font-medium tracking-tight">Thinking...</div>
         </div>
       ) : (
-        <button 
+        <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={cn(
             "flex items-center justify-between w-full",
@@ -120,13 +121,16 @@ const PurePreviewMessage = ({
   message,
   isLatestMessage,
   status,
+  setInput,
+  handleSubmit
 }: {
   message: TMessage;
   isLoading: boolean;
   status: "error" | "submitted" | "streaming" | "ready";
   isLatestMessage: boolean;
+  setInput: UseChatHelpers['setInput'];
+  handleSubmit: UseChatHelpers['handleSubmit'];
 }) => {
-  // Create a string with all text parts for copy functionality
   const getMessageText = () => {
     if (!message.parts) return "";
     return message.parts
@@ -135,7 +139,6 @@ const PurePreviewMessage = ({
       .join("\n\n");
   };
 
-  // Only show copy button if the message is from the assistant and not currently streaming
   const shouldShowCopyButton = message.role === "assistant" && (!isLatestMessage || status !== "streaming");
 
   return (
@@ -148,8 +151,8 @@ const PurePreviewMessage = ({
     >
       <div
         className={cn(
-          "flex gap-4 w-full group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl",
-          "group-data-[role=user]/message:w-fit",
+          "flex gap-4 w-full",
+          message.role === "user" ? "ml-auto max-w-2xl w-fit" : ""
         )}
       >
         <div className="flex flex-col w-full space-y-3">
@@ -184,6 +187,8 @@ const PurePreviewMessage = ({
                     result={result}
                     isLatestMessage={isLatestMessage}
                     status={status}
+                    setInput={setInput}
+                    handleSubmit={handleSubmit}
                   />
                 );
               case "reasoning":
