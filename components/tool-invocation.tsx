@@ -210,15 +210,12 @@ export function ToolInvocation({
                     }}
                     onUiAction={async (toolCallName, toolCallParams) => {
                       if (append) {
-                        const userMessageContent = `Run tool ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
+                        const userMessageContent = `Call ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
                         
-                        // Construct the message object for append
-                        // Ensure TMessage is available or use a compatible structure for CreateMessage
                         const newMessage: TMessage = {
-                          id: nanoid(), // nanoid needs to be imported if not already
+                          id: nanoid(),
                           role: 'user',
                           content: userMessageContent,
-                          // parts: [{ type: 'text', text: userMessageContent }] // if parts structure is preferred by your setup
                         };
 
                         append(newMessage);
