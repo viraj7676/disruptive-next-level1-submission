@@ -61,26 +61,24 @@ export function ToolInvocation({
 
   useEffect(() => {
     console.log('result', result);
-    if (typeof result === "string") {
-      try {
-        console.log('is string');
-        const parsedContainer: ParsedResultContainer = JSON.parse(result);
-        console.log('parsedContainer', parsedContainer);
-        if (parsedContainer && Array.isArray(parsedContainer.content)) {
-          const resources = parsedContainer.content
-            .filter(
-              (item): item is ContentItemWithHtmlResource => // Type guard
-                item.type === "resource" &&
-                item.resource?.mimeType === "text/html"
-            )
-            .map((item) => item.resource);
-          setHtmlResourceContents(resources);
+    try {
+      console.log('is string');
+      const parsedContainer: ParsedResultContainer = JSON.parse(result);
+      console.log('parsedContainer', parsedContainer);
+      if (parsedContainer && Array.isArray(parsedContainer.content)) {
+        const resources = parsedContainer.content
+          .filter(
+            (item): item is ContentItemWithHtmlResource => // Type guard
+              item.type === "resource" &&
+              item.resource?.mimeType === "text/html"
+          )
+          .map((item) => item.resource);
+        setHtmlResourceContents(resources);
 
-          console.log('resources', resources);
-        }
-      } catch (error) {
-        console.error("Failed to parse result content for HtmlResource:", error);
+        console.log('resources', resources);
       }
+    } catch (error) {
+      console.error("Failed to parse result content for HtmlResource:", error);
     }
   }, [result]);
   
