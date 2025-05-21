@@ -60,25 +60,37 @@ export function ToolInvocation({
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
   useEffect(() => {
-    console.log('result', result);
-    try {
-      console.log('is string');
-      const parsedContainer: ParsedResultContainer = JSON.parse(result);
-      console.log('parsedContainer', parsedContainer);
-      if (parsedContainer && Array.isArray(parsedContainer.content)) {
-        const resources = parsedContainer.content
+    setHtmlResourceContents([]);
+
+    let container: ParsedResultContainer  = result;
+    
+    if (typeof result === 'string') {
+      try {
+        const parsed = JSON.parse(result);
+        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.content)) {
+          container = parsed as ParsedResultContainer;
+        } else {
+          console.warn("Parsed string result does not have the expected .content array structure:", parsed);
+        }
+      } catch (error) {
+        console.error("Failed to parse string result for HtmlResource:", error, "String was:", result);
+      }
+    }
+
+    if (container) {
+      try {
+        const resources = container.content
           .filter(
             (item): item is ContentItemWithHtmlResource => // Type guard
               item.type === "resource" &&
-              item.resource?.mimeType === "text/html"
+              item.resource &&
+              item.resource.mimeType === "text/html"
           )
           .map((item) => item.resource);
         setHtmlResourceContents(resources);
-
-        console.log('resources', resources);
+      } catch (error) {
+        console.error("Error processing content for HtmlResource:", error);
       }
-    } catch (error) {
-      console.error("Failed to parse result content for HtmlResource:", error);
     }
   }, [result]);
   
