@@ -87,6 +87,10 @@ export function ToolInvocation({
               item.resource.mimeType === "text/html"
           )
           .map((item) => item.resource);
+
+        if (resources.length > 0) {
+          setIsExpanded(true);
+        }
         setHtmlResourceContents(resources);
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
@@ -192,27 +196,29 @@ export function ToolInvocation({
                 <span className="font-medium">Result</span>
               </div>
 
-              {htmlResourceContents.length > 0 &&
+              {htmlResourceContents.length > 0 ?
                 htmlResourceContents.map((resourceData, index) => (
                   <HtmlResource
                     key={resourceData.uri || `html-resource-${index}`}
                     resource={resourceData}
+                    style={{
+                      minHeight: 500,
+                    }}
                     onUiAction={async (tool, params) => {
                       console.log("Action:", tool, params);
                       // You might want to dispatch this action to your agent or MCP host
                       return Promise.resolve({ status: "ok" });
                     }}
                   />
-                ))}
-
-              <pre
-                className={cn(
-                  "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
-                  "border border-border/40 bg-muted/10"
-                )}
-              >
+                )) :
+                <pre
+                  className={cn(
+                    "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
+                    "border border-border/40 bg-muted/10"
+                  )}
+                >
                 {formatContent(result)}
-              </pre>
+              </pre>}
             </div>
           )}
         </div>
