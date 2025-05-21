@@ -64,8 +64,6 @@ export function ToolInvocation({
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
   useEffect(() => {
-    setHtmlResourceContents([]);
-
     let container: ParsedResultContainer  = result;
     
     if (typeof result === 'string') {
