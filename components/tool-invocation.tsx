@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -32,7 +32,17 @@ export function ToolInvocation({
   status,
 }: ToolInvocationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [formattedResult, setFormattedResult] = useState<{ type: string, resource: { mimeType: string } }>();
 
+  useEffect(() => {
+        if (typeof result === "string") {
+          const parsed = JSON.parse(result).catch((error: any) => {
+            console.error(error);
+          });
+          setFormattedResult(parsed);
+        }
+  }, [result]);
+  
   const getStatusIcon = () => {
     if (state === "call") {
       if (isLatestMessage && status !== "ready") {
@@ -130,10 +140,10 @@ export function ToolInvocation({
                 <ArrowRight className="h-3 w-3" />
                 <span className="font-medium">Result</span>
               </div>
-              {result?.type === "resource" &&
-              result?.resource?.mimeType === "text/html" ? (
+              {!!formattedResult && formattedResult.type === "resource" &&
+              formattedResult?.resource?.mimeType === "text/html" ? (
                 <HtmlResource
-                  resource={result.resource}
+                  resource={formattedResult.resource}
                   onUiAction={async (tool, params) => {
                     console.log("Action:", tool, params);
                     // You might want to dispatch this action to your agent or MCP host
