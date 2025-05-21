@@ -60,6 +60,7 @@ export function ToolInvocation({
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
   useEffect(() => {
+    console.log('result', result);
     setHtmlResourceContents([]);
     if (typeof result === "string" && result.trim().startsWith("{")) {
       try {
@@ -73,6 +74,8 @@ export function ToolInvocation({
             )
             .map((item) => item.resource);
           setHtmlResourceContents(resources);
+
+          console.log('resources', resources);
         }
       } catch (error) {
         console.error("Failed to parse result content for HtmlResource:", error);
