@@ -100,6 +100,10 @@ export const ToolInvocation = memo(function ToolInvocation({
         const currentUris = htmlResourceContents.map(r => r.uri).sort();
         if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
           setHtmlResourceContents(newHtmlResources);
+
+          if (newHtmlResources.length > 0 && !isExpanded) {
+            setIsExpanded(true);
+          }
         }
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
