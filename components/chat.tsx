@@ -1,7 +1,7 @@
 "use client";
 
 import { defaultModel, type modelID } from "@/ai/providers";
-import { Message, useChat } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
@@ -10,9 +10,7 @@ import { toast } from "sonner";
 import { useRouter, useParams } from "next/navigation";
 import { getUserId } from "@/lib/user-id";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
-import { STORAGE_KEYS } from "@/lib/constants";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { convertToUIMessages } from "@/lib/chat-store";
+import { useQueryClient } from "@tanstack/react-query";
 import { type Message as DBMessage } from "@/lib/db/schema";
 import { nanoid } from "nanoid";
 import { useMCP } from "@/lib/context/mcp-context";
@@ -51,57 +49,46 @@ export default function Chat() {
   }, [chatId]);
   
   // Use React Query to fetch chat history
-  const { data: chatData, isLoading: isLoadingChat, error } = useQuery({
-    queryKey: ['chat', chatId, userId] as const,
-    queryFn: async ({ queryKey }) => {
-      const [_, chatId, userId] = queryKey;
-      if (!chatId || !userId) return null;
+  // const { data: chatData, isLoading: isLoadingChat, error } = useQuery({
+  //   queryKey: ['chat', chatId, userId] as const,
+  //   queryFn: async ({ queryKey }) => {
+  //     const [_, chatId, userId] = queryKey;
+  //     if (!chatId || !userId) return null;
       
-      const response = await fetch(`/api/chats/${chatId}`, {
-        headers: {
-          'x-user-id': userId
-        }
-      });
+  //     const response = await fetch(`/api/chats/${chatId}`, {
+  //       headers: {
+  //         'x-user-id': userId
+  //       }
+  //     });
       
-      if (!response.ok) {
-        // For 404, return empty chat data instead of throwing
-        if (response.status === 404) {
-          return { id: chatId, messages: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-        }
-        throw new Error('Failed to load chat');
-      }
+  //     if (!response.ok) {
+  //       // For 404, return empty chat data instead of throwing
+  //       if (response.status === 404) {
+  //         return { id: chatId, messages: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+  //       }
+  //       throw new Error('Failed to load chat');
+  //     }
       
-      return response.json() as Promise<ChatData>;
-    },
-    enabled: !!chatId && !!userId,
-    retry: 1,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnWindowFocus: false
-  });
+  //     return response.json() as Promise<ChatData>;
+  //   },
+  //   enabled: !!chatId && !!userId,
+  //   retry: 1,
+  //   staleTime: 1000 * 60 * 5, // 5 minutes
+  //   refetchOnWindowFocus: false
+  // });
   
   // Handle query errors
-  useEffect(() => {
-    if (error) {
-      console.error('Error loading chat history:', error);
-      toast.error('Failed to load chat history');
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     console.error('Error loading chat history:', error);
+  //     toast.error('Failed to load chat history');
+  //   }
+  // }, [error]);
   
   // Prepare initial messages from query data
   const initialMessages = useMemo(() => {
-    if (!chatData || !chatData.messages || chatData.messages.length === 0) {
-      return [];
-    }
-    
-    // Convert DB messages to UI format, then ensure it matches the Message type from @ai-sdk/react
-    const uiMessages = convertToUIMessages(chatData.messages);
-    return uiMessages.map(msg => ({
-      id: msg.id,
-      role: msg.role as Message['role'], // Ensure role is properly typed
-      content: msg.content,
-      parts: msg.parts,
-    } as Message));
-  }, [chatData]);
+    return [];
+  }, []);
   
   const { messages, input, handleInputChange, handleSubmit, status, stop, append } =
     useChat({
@@ -150,11 +137,11 @@ export default function Chat() {
     }
   }, [chatId, generatedChatId, input, handleSubmit, router]);
 
-  const isLoading = status === "streaming" || status === "submitted" || isLoadingChat;
+  const isLoading = status === "streaming" || status === "submitted";
 
   return (
     <div className="h-dvh flex flex-col justify-center w-full max-w-3xl mx-auto px-4 sm:px-6 md:py-4">
-      {messages.length === 0 && !isLoadingChat ? (
+      {messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
           <ProjectOverview />
           <form

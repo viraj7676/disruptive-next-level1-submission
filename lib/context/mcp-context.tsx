@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useRef } from "react";
-import { useLocalStorage } from "@/lib/hooks/use-local-storage";
+import { useLocalStorage, useLocalStorageMcpServers } from "@/lib/hooks/use-local-storage";
 import { STORAGE_KEYS } from "@/lib/constants";
 import { startSandbox, stopSandbox } from "@/app/actions";
 
@@ -79,7 +79,7 @@ async function waitForServerReady(url: string, maxAttempts = 20, timeout = 3000)
 }
 
 export function MCPProvider({ children }: { children: React.ReactNode }) {
-  const [mcpServers, setMcpServers] = useLocalStorage<MCPServer[]>(
+  const [mcpServers, setMcpServers] = useLocalStorageMcpServers<MCPServer[]>(
     STORAGE_KEYS.MCP_SERVERS, 
     []
   );

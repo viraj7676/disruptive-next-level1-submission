@@ -268,107 +268,6 @@ export const MCPServerManager = ({
         }
     };
 
-    const addEnvVar = () => {
-        if (!newEnvVar.key) return;
-
-        setNewServer({
-            ...newServer,
-            env: [...(newServer.env || []), { ...newEnvVar }]
-        });
-
-        setNewEnvVar({ key: '', value: '' });
-    };
-
-    const removeEnvVar = (index: number) => {
-        const updatedEnv = [...(newServer.env || [])];
-        updatedEnv.splice(index, 1);
-        setNewServer({ ...newServer, env: updatedEnv });
-        
-        // Clean up visibility state for this index
-        const updatedVisibility = { ...showSensitiveEnvValues };
-        delete updatedVisibility[index];
-        setShowSensitiveEnvValues(updatedVisibility);
-        
-        // If currently editing this value, cancel editing
-        if (editingEnvIndex === index) {
-            setEditingEnvIndex(null);
-        }
-    };
-
-    const startEditEnvValue = (index: number, value: string) => {
-        setEditingEnvIndex(index);
-        setEditedEnvValue(value);
-    };
-
-    const saveEditedEnvValue = () => {
-        if (editingEnvIndex !== null) {
-            const updatedEnv = [...(newServer.env || [])];
-            updatedEnv[editingEnvIndex] = {
-                ...updatedEnv[editingEnvIndex],
-                value: editedEnvValue
-            };
-            setNewServer({ ...newServer, env: updatedEnv });
-            setEditingEnvIndex(null);
-        }
-    };
-
-    const addHeader = () => {
-        if (!newHeader.key) return;
-
-        setNewServer({
-            ...newServer,
-            headers: [...(newServer.headers || []), { ...newHeader }]
-        });
-
-        setNewHeader({ key: '', value: '' });
-    };
-
-    const removeHeader = (index: number) => {
-        const updatedHeaders = [...(newServer.headers || [])];
-        updatedHeaders.splice(index, 1);
-        setNewServer({ ...newServer, headers: updatedHeaders });
-        
-        // Clean up visibility state for this index
-        const updatedVisibility = { ...showSensitiveHeaderValues };
-        delete updatedVisibility[index];
-        setShowSensitiveHeaderValues(updatedVisibility);
-        
-        // If currently editing this value, cancel editing
-        if (editingHeaderIndex === index) {
-            setEditingHeaderIndex(null);
-        }
-    };
-
-    const startEditHeaderValue = (index: number, value: string) => {
-        setEditingHeaderIndex(index);
-        setEditedHeaderValue(value);
-    };
-
-    const saveEditedHeaderValue = () => {
-        if (editingHeaderIndex !== null) {
-            const updatedHeaders = [...(newServer.headers || [])];
-            updatedHeaders[editingHeaderIndex] = {
-                ...updatedHeaders[editingHeaderIndex],
-                value: editedHeaderValue
-            };
-            setNewServer({ ...newServer, headers: updatedHeaders });
-            setEditingHeaderIndex(null);
-        }
-    };
-
-    const toggleSensitiveEnvValue = (index: number) => {
-        setShowSensitiveEnvValues(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
-    };
-
-    const toggleSensitiveHeaderValue = (index: number) => {
-        setShowSensitiveHeaderValues(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
-    };
 
     const hasAdvancedConfig = (server: MCPServer) => {
         return (server.env && server.env.length > 0) ||
@@ -797,7 +696,7 @@ export const MCPServerManager = ({
 
                             {/* Advanced Configuration */}
                             <Accordion type="single" collapsible className="w-full">
-                                <AccordionItem value="env-vars">
+                                {/* <AccordionItem value="env-vars">
                                     <AccordionTrigger className="text-sm py-2">
                                         Environment Variables
                                     </AccordionTrigger>
@@ -918,9 +817,9 @@ export const MCPServerManager = ({
                                             </p>
                                         </div>
                                     </AccordionContent>
-                                </AccordionItem>
+                                </AccordionItem> */}
 
-                                <AccordionItem value="headers">
+                                {/* <AccordionItem value="headers">
                                     <AccordionTrigger className="text-sm py-2">
                                         {newServer.type === 'sse' ? 'HTTP Headers' : 'Additional Configuration'}
                                     </AccordionTrigger>
@@ -1042,7 +941,7 @@ export const MCPServerManager = ({
                                             </p>
                                         </div>
                                     </AccordionContent>
-                                </AccordionItem>
+                                </AccordionItem> */}
                             </Accordion>
                         </div>
                     </div>
