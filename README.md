@@ -1,9 +1,12 @@
 <a href="https://mcp.scira.ai">
-  <h1 align="center">Scira MCP Chat</h1>
+  <h1 align="center">MCP UI Playground Chat (Scira MCP Chat Fork)</h1>
 </a>
 
 <p align="center">
-  An open-source AI chatbot app powered by Model Context Protocol (MCP), built with Next.js and the AI SDK by Vercel.
+
+  This Scira Chat fork hosts a playground for [MCP-UI](https://github.com/idosal/mcp-ui)-enabled chats. The chat automatically renders tool call results from the `mcp-ui` server SDK as UI components and can react to actions performed on them. For more information, please refer to the [documentation](https://idosal.github.io/mcp-ui/).
+
+  You can define any MCP server to see the results live. For your convenience, the [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse) is pre-configured as a quickstart.
 </p>
 
 <p align="center">
@@ -15,6 +18,7 @@
 
 ## Features
 
+- **Supports UI in tool responses using `mcp-ui`**!
 - Streaming text responses powered by the [AI SDK by Vercel](https://sdk.vercel.ai/docs), allowing multiple AI providers to be used interchangeably with just a few lines of code.
 - Full integration with [Model Context Protocol (MCP)](https://modelcontextprotocol.io) servers to expand available tools and capabilities.
 - Multiple MCP transport types (SSE and stdio) for connecting to various tool providers.
@@ -53,11 +57,11 @@ If you select stdio transport:
 
 ### Available MCP Servers
 
-You can use any MCP-compatible server with this application. Here are some examples:
-
-- [Composio](https://composio.dev/mcp) - Provides search, code interpreter, and other tools
-- [Zapier MCP](https://zapier.com/mcp) - Provides access to Zapier tools
-- Any MCP server using stdio transport with npx and python3
+You can use any MCP-compatible server with this application. It comes pre-configured with the MCP-UI [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse), which exposes 4 tools -
+- `get_tasks_status` - Get a textual representation of the status of all tasks. Used to highlight the difference from UI tool results.
+- `show_task_status` - Displays a UI for the user to see the status of tasks (as opposed to text).
+- `show_user_status` - Displays a UI for the user to see the status of a user and their tasks (triggered by clicking on the user avatar in the `show_task` UI).
+- `nudge_team_member` - Nudges team member (triggered by clicking `Nuge` on the `user_status` UI).
 
 ## License
 
