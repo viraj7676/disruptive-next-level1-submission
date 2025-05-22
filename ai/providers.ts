@@ -37,9 +37,9 @@ const getApiKey = (key: string): string | undefined => {
 };
 
 // Create provider instances with API keys from localStorage
-const openaiClient = createOpenAI({
-  apiKey: getApiKey('OPENAI_API_KEY'),
-});
+// const openaiClient = createOpenAI({
+//   apiKey: getApiKey('OPENAI_API_KEY'),
+// });
 
 const anthropicClient = createAnthropic({
   apiKey: getApiKey('ANTHROPIC_API_KEY'),
@@ -49,12 +49,12 @@ const groqClient = createGroq({
   apiKey: getApiKey('GROQ_API_KEY'),
 });
 
-const xaiClient = createXai({
-  apiKey: getApiKey('XAI_API_KEY'),
-});
+// const xaiClient = createXai({
+//   apiKey: getApiKey('XAI_API_KEY'),
+// });
 
 const languageModels = {
-  "gpt-4.1-mini": openaiClient("gpt-4.1-mini"),
+  // "gpt-4.1-mini": openaiClient("gpt-4.1-mini"),
   "claude-3-7-sonnet": anthropicClient('claude-3-7-sonnet-20250219'),
   "qwen-qwq": wrapLanguageModel(
     {
@@ -62,17 +62,17 @@ const languageModels = {
       middleware
     }
   ),
-  "grok-3-mini": xaiClient("grok-3-mini-latest"),
+  // "grok-3-mini": xaiClient("grok-3-mini-latest"),
 };
 
 export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
-  "gpt-4.1-mini": {
-    provider: "OpenAI",
-    name: "GPT-4.1 Mini",
-    description: "Compact version of OpenAI's GPT-4.1 with good balance of capabilities, including vision.",
-    apiVersion: "gpt-4.1-mini",
-    capabilities: ["Balance", "Creative", "Vision"]
-  },
+  // "gpt-4.1-mini": {
+  //   provider: "OpenAI",
+  //   name: "GPT-4.1 Mini",
+  //   description: "Compact version of OpenAI's GPT-4.1 with good balance of capabilities, including vision.",
+  //   apiVersion: "gpt-4.1-mini",
+  //   capabilities: ["Balance", "Creative", "Vision"]
+  // },
   "claude-3-7-sonnet": {
     provider: "Anthropic",
     name: "Claude 3.7 Sonnet",
@@ -87,13 +87,13 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
     apiVersion: "qwen-qwq",
     capabilities: ["Reasoning", "Efficient", "Agentic"]
   },
-  "grok-3-mini": {
-    provider: "XAI",
-    name: "Grok 3 Mini",
-    description: "Latest version of XAI's Grok 3 Mini with strong reasoning and coding capabilities.",
-    apiVersion: "grok-3-mini-latest",
-    capabilities: ["Reasoning", "Efficient", "Agentic"]
-  },
+  // "grok-3-mini": {
+  //   provider: "XAI",
+  //   name: "Grok 3 Mini",
+  //   description: "Latest version of XAI's Grok 3 Mini with strong reasoning and coding capabilities.",
+  //   apiVersion: "grok-3-mini-latest",
+  //   capabilities: ["Reasoning", "Efficient", "Agentic"]
+  // },
 };
 
 // Update API keys when localStorage changes (for runtime updates)
