@@ -63,6 +63,7 @@ export function ToolInvocation({
   const [isExpanded, setIsExpanded] = useState(false);
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
+  // Effect 1: Process result and update htmlResourceContents
   useEffect(() => {
     let processedContainer: ParsedResultContainer | null = null;
 
@@ -97,29 +98,26 @@ export function ToolInvocation({
         setHtmlResourceContents(prevContents => {
           const newUris = newHtmlResources.map(r => r.uri).sort();
           const currentUris = prevContents.map(r => r.uri).sort();
-
           if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
-            if (newHtmlResources.length > 0 && !isExpanded) {
-              setIsExpanded(true);
-            }
             return newHtmlResources;
           }
           return prevContents;
         });
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
-        setHtmlResourceContents(prevContents => {
-            if (prevContents.length > 0) return [];
-            return prevContents;
-        });
+        setHtmlResourceContents(prevContents => (prevContents.length > 0 ? [] : prevContents));
       }
     } else {
-      setHtmlResourceContents(prevContents => {
-        if (prevContents.length > 0) return [];
-        return prevContents;
-      });
+      setHtmlResourceContents(prevContents => (prevContents.length > 0 ? [] : prevContents));
     }
-  }, [result, isExpanded]);
+  }, [result]);
+
+  // Effect 2: Auto-expand when new resources appear and it's collapsed
+  useEffect(() => {
+    if (htmlResourceContents.length > 0 && !isExpanded) {
+      setIsExpanded(true);
+    }
+  }, [htmlResourceContents, isExpanded]);
   
   const getStatusIcon = () => {
     if (state === "call") {
@@ -181,6 +179,17 @@ export function ToolInvocation({
     }
   }, [append]);
 
+  const renderedHtmlResources = useMemo(() => {
+    return htmlResourceContents.map((resourceData, index) => (
+      <HtmlResource
+        key={resourceData.uri || `html-resource-${index}`}
+        resource={resourceData}
+        style={resourceStyle}
+        onUiAction={handleUiAction}
+      />
+    ));
+  }, [htmlResourceContents, resourceStyle, handleUiAction]);
+
   return (
     <div className={cn(
       "flex flex-col mb-2 rounded-md border border-border/50 overflow-hidden",
@@ -241,14 +250,7 @@ export function ToolInvocation({
               </div>
 
               {htmlResourceContents.length > 0 ?
-                htmlResourceContents.map((resourceData, index) => (
-                  <HtmlResource
-                    key={resourceData.uri || `html-resource-${index}`}
-                    resource={resourceData}
-                    style={resourceStyle}
-                    onUiAction={handleUiAction}
-                  />
-                )) :
+                renderedHtmlResources :
                 <pre
                   className={cn(
                     "text-xs font-mono p-2.5 rounded-md overflow-x-auto max-h-[300px] overflow-y-auto",
