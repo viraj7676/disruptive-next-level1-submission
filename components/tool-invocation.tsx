@@ -109,7 +109,7 @@ export const ToolInvocation = memo(function ToolInvocation({
         console.error("Error processing content for HtmlResource:", error);
       }
     }
-  }, [result, htmlResourceContents]);
+  }, [result, htmlResourceContents, isExpanded]);
   
   const getStatusIcon = () => {
     if (state === "call") {
