@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, memo } from "react";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -51,7 +51,7 @@ interface ToolInvocationProps {
   append?: UseChatHelpers['append'];
 }
 
-export function ToolInvocation({
+export const ToolInvocation = memo(function ToolInvocation({
   toolName,
   state,
   args,
@@ -265,4 +265,4 @@ export function ToolInvocation({
       )}
     </div>
   );
-} 
+});
