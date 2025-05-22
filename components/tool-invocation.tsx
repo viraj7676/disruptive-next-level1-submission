@@ -64,41 +64,58 @@ export function ToolInvocation({
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
   useEffect(() => {
-    let container: ParsedResultContainer  = result;
-    
-    if (typeof result === 'string') {
+    let processedContainer: ParsedResultContainer | null = null;
+
+    // Safely determine processedContainer from result
+    if (result && typeof result === 'object' && result.content && Array.isArray(result.content)) {
+      // Result is already in the expected object format
+      processedContainer = result as ParsedResultContainer;
+    } else if (typeof result === 'string') {
+      // Result is a string, try to parse it
       try {
         const parsed = JSON.parse(result);
-        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.content)) {
-          container = parsed as ParsedResultContainer;
-        } else {
+        if (parsed && typeof parsed === 'object' && parsed.content && Array.isArray(parsed.content)) {
+          processedContainer = parsed as ParsedResultContainer;
+        } else if (parsed) {
+          // Parsed, but not the expected structure
           console.warn("Parsed string result does not have the expected .content array structure:", parsed);
         }
+        // If JSON.parse returns null/undefined or other non-object, it's handled as processedContainer remaining null
       } catch (error) {
-        console.error("Failed to parse string result for HtmlResource:", error, "String was:", result);
+        console.error("Failed to parse string result for HtmlResource:", error, "Input string was:", result);
       }
+    } else if (result !== null && result !== undefined) {
+      // Result is not null/undefined, not a string, and not the expected object structure
+      console.warn("Result is not a string and not in the expected object structure:", result);
     }
 
-    if (container) {
+    if (processedContainer) {
       try {
-        const resources = container.content
+        const newHtmlResources = processedContainer.content
           .filter(
-            (item): item is ContentItemWithHtmlResource => // Type guard
+            (item): item is ContentItemWithHtmlResource =>
               item.type === "resource" &&
               item.resource &&
               item.resource.mimeType === "text/html"
           )
           .map((item) => item.resource);
 
-        if (resources.length > 0) {
+        if (newHtmlResources.length > 0 && !isExpanded) {
           setIsExpanded(true);
         }
-        setHtmlResourceContents(resources);
+
+        // Compare based on sorted URIs to prevent unnecessary updates
+        const newUris = newHtmlResources.map(r => r.uri).sort();
+        const currentUris = htmlResourceContents.map(r => r.uri).sort();
+
+        if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
+          setHtmlResourceContents(newHtmlResources);
+        }
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
       }
     }
-  }, [result]);
+  }, [result, isExpanded, htmlResourceContents]);
   
   const getStatusIcon = () => {
     if (state === "call") {
