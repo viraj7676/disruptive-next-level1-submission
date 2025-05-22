@@ -84,7 +84,7 @@ export function MCPProvider({ children }: { children: React.ReactNode }) {
     []
   );
   
-  const [selectedMcpServers, setSelectedMcpServers] = useLocalStorageMcpServers<string[]>(
+  const [selectedMcpServers, setSelectedMcpServers] = useLocalStorage<string[]>(
     STORAGE_KEYS.SELECTED_MCP_SERVERS, 
     []
   );

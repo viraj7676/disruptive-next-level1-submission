@@ -6,7 +6,7 @@
 
   This Scira Chat fork hosts a playground for [MCP-UI](https://github.com/idosal/mcp-ui)-enabled chats. The chat automatically renders tool call results from the `mcp-ui` server SDK as UI components and can react to actions performed on them. For more information, please refer to the [documentation](https://idosal.github.io/mcp-ui/).
 
-  You can define any MCP server to see the results live. For your convenience, the [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse) is pre-configured as a quickstart.
+  You can define any MCP server to see the results live. For your convenience, you can configure the [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse) as a quickstart (see more details in the [guide](https://github.com/idosal/mcp-ui?tab=readme-ov-file#-examples)).
 </p>
 
 <p align="center">
@@ -57,7 +57,7 @@ If you select stdio transport:
 
 ### Available MCP Servers
 
-You can use any MCP-compatible server with this application. It comes pre-configured with the MCP-UI [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse), which exposes 4 tools -
+You can use any MCP-compatible server with this application. You can use the [demo server](https://remote-mcp-server-authless.idosalomon.workers.dev/sse), which exposes 4 tools -
 - `get_tasks_status` - Get a textual representation of the status of all tasks. Used to highlight the difference from UI tool results.
 - `show_task_status` - Displays a UI for the user to see the status of tasks (as opposed to text).
 - `show_user_status` - Displays a UI for the user to see the status of a user and their tasks (triggered by clicking on the user avatar in the `show_task` UI).
