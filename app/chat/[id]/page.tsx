@@ -45,7 +45,7 @@ export default function ChatPage() {
       });
     }
 
-    prefetchChat();
+    // prefetchChat();
   }, [chatId, userId, queryClient]);
 
   return <Chat />;
