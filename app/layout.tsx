@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: "https://scira-mcp-chat-indol.vercel.app",
     images: [
       {
-        url: "https://scira-mcp-chat-indol.vercel.app/opengraph-image.png",
+        url: "https://scira-mcp-chat-indol.vercel.app/twitter-image.png",
         width: 1200,
         height: 630,
       },
