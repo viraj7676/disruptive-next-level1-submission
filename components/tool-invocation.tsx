@@ -66,26 +66,20 @@ export function ToolInvocation({
   useEffect(() => {
     let processedContainer: ParsedResultContainer | null = null;
 
-    // Safely determine processedContainer from result
     if (result && typeof result === 'object' && result.content && Array.isArray(result.content)) {
-      // Result is already in the expected object format
       processedContainer = result as ParsedResultContainer;
     } else if (typeof result === 'string') {
-      // Result is a string, try to parse it
       try {
         const parsed = JSON.parse(result);
         if (parsed && typeof parsed === 'object' && parsed.content && Array.isArray(parsed.content)) {
           processedContainer = parsed as ParsedResultContainer;
         } else if (parsed) {
-          // Parsed, but not the expected structure
           console.warn("Parsed string result does not have the expected .content array structure:", parsed);
         }
-        // If JSON.parse returns null/undefined or other non-object, it's handled as processedContainer remaining null
       } catch (error) {
         console.error("Failed to parse string result for HtmlResource:", error, "Input string was:", result);
       }
     } else if (result !== null && result !== undefined) {
-      // Result is not null/undefined, not a string, and not the expected object structure
       console.warn("Result is not a string and not in the expected object structure:", result);
     }
 
@@ -100,22 +94,32 @@ export function ToolInvocation({
           )
           .map((item) => item.resource);
 
-        if (newHtmlResources.length > 0 && !isExpanded) {
-          setIsExpanded(true);
-        }
+        setHtmlResourceContents(prevContents => {
+          const newUris = newHtmlResources.map(r => r.uri).sort();
+          const currentUris = prevContents.map(r => r.uri).sort();
 
-        // Compare based on sorted URIs to prevent unnecessary updates
-        const newUris = newHtmlResources.map(r => r.uri).sort();
-        const currentUris = htmlResourceContents.map(r => r.uri).sort();
-
-        if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
-          setHtmlResourceContents(newHtmlResources);
-        }
+          if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
+            if (newHtmlResources.length > 0 && !isExpanded) {
+              setIsExpanded(true);
+            }
+            return newHtmlResources;
+          }
+          return prevContents;
+        });
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
+        setHtmlResourceContents(prevContents => {
+            if (prevContents.length > 0) return [];
+            return prevContents;
+        });
       }
+    } else {
+      setHtmlResourceContents(prevContents => {
+        if (prevContents.length > 0) return [];
+        return prevContents;
+      });
     }
-  }, [result, isExpanded, htmlResourceContents]);
+  }, [result, isExpanded]);
   
   const getStatusIcon = () => {
     if (state === "call") {
