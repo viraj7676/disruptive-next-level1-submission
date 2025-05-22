@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -160,6 +160,27 @@ export function ToolInvocation({
     }
   };
 
+  const resourceStyle = useMemo(() => ({ minHeight: 425 }), []);
+
+  const handleUiAction = useCallback(async (toolCallName: string, toolCallParams: any) => {
+    if (append) {
+      const userMessageContent = `Call ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
+      
+      const newMessage: TMessage = {
+        id: nanoid(),
+        role: 'user',
+        content: userMessageContent,
+      };
+
+      append(newMessage);
+      
+      return Promise.resolve({ status: "ok", message: "Tool execution requested via append" });
+    } else {
+      console.warn("append function not available in ToolInvocation for UI action");
+      return Promise.resolve({ status: "error", message: "Chat context (append) not available for UI action" });
+    }
+  }, [append]);
+
   return (
     <div className={cn(
       "flex flex-col mb-2 rounded-md border border-border/50 overflow-hidden",
@@ -224,27 +245,8 @@ export function ToolInvocation({
                   <HtmlResource
                     key={resourceData.uri || `html-resource-${index}`}
                     resource={resourceData}
-                    style={{
-                      minHeight: 425,
-                    }}
-                    onUiAction={async (toolCallName, toolCallParams) => {
-                      if (append) {
-                        const userMessageContent = `Call ${toolCallName} with parameters: ${JSON.stringify(toolCallParams)}`;
-                        
-                        const newMessage: TMessage = {
-                          id: nanoid(),
-                          role: 'user',
-                          content: userMessageContent,
-                        };
-
-                        append(newMessage);
-                        
-                        return Promise.resolve({ status: "ok", message: "Tool execution requested via append" });
-                      } else {
-                        console.warn("append function not available in ToolInvocation for UI action");
-                        return Promise.resolve({ status: "error", message: "Chat context (append) not available for UI action" });
-                      }
-                    }}
+                    style={resourceStyle}
+                    onUiAction={handleUiAction}
                   />
                 )) :
                 <pre
