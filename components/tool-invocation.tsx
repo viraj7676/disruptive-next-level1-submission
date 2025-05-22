@@ -63,7 +63,6 @@ export const ToolInvocation = memo(function ToolInvocation({
   const [isExpanded, setIsExpanded] = useState(false);
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
-  // Effect: Process result, update htmlResourceContents, and auto-expand if new content
   useEffect(() => {
     let processedContainer: ParsedResultContainer | null = null;
 
@@ -79,10 +78,17 @@ export const ToolInvocation = memo(function ToolInvocation({
         }
       } catch (error) {
         console.error("Failed to parse string result for HtmlResource:", error, "Input string was:", result);
-        return;
+        // Error during parsing, clear content
+        setHtmlResourceContents(prev => prev.length > 0 ? [] : prev);
+        return; // Exit effect early
       }
     } else if (result !== null && result !== undefined) {
-      console.warn("Result is not a string and not in the expected object structure:", result);
+      // Result is not an object, not a string, but also not null/undefined.
+      // This case implies an unexpected type for 'result'.
+      console.warn("Result has an unexpected type or structure:", result);
+      // It's safest to clear content here as well.
+      setHtmlResourceContents(prev => prev.length > 0 ? [] : prev);
+      return; // Exit effect early
     }
 
     if (processedContainer) {
@@ -96,20 +102,35 @@ export const ToolInvocation = memo(function ToolInvocation({
           )
           .map((item) => item.resource);
 
-        const newUris = newHtmlResources.map(r => r.uri).sort();
-        const currentUris = htmlResourceContents.map(r => r.uri).sort();
-        if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
-          setHtmlResourceContents(newHtmlResources);
-
-          if (newHtmlResources.length > 0 && !isExpanded) {
-            setIsExpanded(true);
+        setHtmlResourceContents(prevContents => {
+          const newUris = newHtmlResources.map(r => r.uri).sort();
+          const currentUris = prevContents.map(r => r.uri).sort();
+            
+          if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
+            // Content has actually changed, set it.
+            // Also, trigger expansion if new content arrived and we are currently collapsed.
+            if (newHtmlResources.length > 0) {
+              setIsExpanded(currentExpandedState => {
+                if (!currentExpandedState) return true; // Expand if not already expanded
+                return currentExpandedState; // Otherwise, keep current state
+              });
+            }
+            return newHtmlResources;
           }
-        }
+          return prevContents; // No change to htmlResourceContents
+        });
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
+        // Error during processing, clear content
+        setHtmlResourceContents(prev => prev.length > 0 ? [] : prev);
       }
+    } else {
+      // Result is null, undefined (implicitly handled by lack of processedContainer), 
+      // or became null after initial checks (e.g. string parsed to null).
+      // Clear content.
+      setHtmlResourceContents(prev => prev.length > 0 ? [] : prev);
     }
-  }, [result, htmlResourceContents, isExpanded]);
+  }, [result]); // Only re-run if result changes
   
   const getStatusIcon = () => {
     if (state === "call") {
