@@ -11,15 +11,15 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mcp.scira.ai"),
-  title: "Scira MCP Chat",
-  description: "Scira MCP Chat is a minimalistic MCP client with a good feature set.",
+  metadataBase: new URL("https://scira-mcp-chat-indol.vercel.app"),
+  title: "MCP-UI Playground",
+  description: "MCP-UI Playground enables you to experiment with your MCP-UI servers",
   openGraph: {
-    siteName: "Scira MCP Chat",
-    url: "https://mcp.scira.ai",
+    siteName: "MCP-UI Playground",
+    url: "https://scira-mcp-chat-indol.vercel.app",
     images: [
       {
-        url: "https://mcp.scira.ai/opengraph-image.png",
+        url: "https://scira-mcp-chat-indol.vercel.app/opengraph-image.png",
         width: 1200,
         height: 630,
       },
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Scira MCP Chat",
-    description: "Scira MCP Chat is a minimalistic MCP client with a good feature set.",
-    images: ["https://mcp.scira.ai/twitter-image.png"],
+    title: "MCP-UI Playground",
+    description: "MCP-UI Playground enables you to experiment with your MCP-UI servers",
+    images: ["https://scira-mcp-chat-indol.vercel.app/twitter-image.png"],
   },
 };
 

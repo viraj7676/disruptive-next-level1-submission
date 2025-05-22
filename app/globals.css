@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 @custom-variant sunset (&:is(.sunset *));
 @custom-variant black (&:is(.black *));
+@custom-variant ocean (&:is(.ocean *));
 
 :root {
   --background: oklch(0.99 0.01 56.32);
@@ -180,6 +181,53 @@
   --sidebar-accent-foreground: oklch(0.15 0.01 350.00);
   --sidebar-border: oklch(0.25 0.01 340.00);
   --sidebar-ring: oklch(0.45 0.10 35.00);
+  --font-sans: Montserrat, sans-serif;
+  --font-serif: Merriweather, serif;
+  --font-mono: Ubuntu Mono, monospace;
+  --radius: 0.625rem;
+  --shadow-2xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
+  --shadow-xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
+  --shadow-sm: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 1px 2px -4px hsl(0 0% 0% / 0.09);
+  --shadow: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 1px 2px -4px hsl(0 0% 0% / 0.09);
+  --shadow-md: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 2px 4px -4px hsl(0 0% 0% / 0.09);
+  --shadow-lg: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 4px 6px -4px hsl(0 0% 0% / 0.09);
+  --shadow-xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 8px 10px -4px hsl(0 0% 0% / 0.09);
+  --shadow-2xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.22);
+}
+
+.ocean {
+  --background: oklch(0.25 0.029 234.58); /* #1b2b34 */
+  --foreground: oklch(0.86 0.011 252.48); /* #cdd3de */
+  --card: oklch(0.20 0.012 239.79); /* #1c2124 */
+  --card-foreground: oklch(0.81 0.011 250.49); /* #c0c5ce */
+  --popover: oklch(0.20 0.012 239.79); /* #1c2124 */
+  --popover-foreground: oklch(0.81 0.011 250.49); /* #c0c5ce */
+  --primary: oklch(0.77 0.068 151.06); /* #99c794 */
+  --primary-foreground: oklch(0.25 0.029 234.58); /* #1b2b34 */
+  --secondary: oklch(0.34 0.064 246.29); /* #1a4666 */
+  --secondary-foreground: oklch(0.90 0.006 258.55); /* #dfe1e8 */
+  --muted: oklch(0.41 0.019 248.04); /* #4a5664 */
+  --muted-foreground: oklch(0.81 0.011 250.49); /* #c0c5ce */
+  --accent: oklch(0.90 0.092 196.67); /* #5de5da */
+  --accent-foreground: oklch(0.25 0.029 234.58); /* #1b2b34 */
+  --destructive: oklch(0.60 0.222 26.35); /* #f44336 */
+  --destructive-foreground: oklch(1 0 0); /* #ffffff */
+  --border: oklch(0.41 0.019 248.04); /* #4a5664 */
+  --input: oklch(0.20 0.012 239.79); /* #1c2124 */
+  --ring: oklch(0.77 0.068 151.06); /* #99c794 */
+  --chart-1: oklch(0.77 0.068 151.06); /* #99c794 */
+  --chart-2: oklch(0.90 0.092 196.67); /* #5de5da */
+  --chart-3: oklch(0.81 0.132 81.42);  /* #fac863 */
+  --chart-4: oklch(0.67 0.058 151.06); /* Darker green */
+  --chart-5: oklch(0.80 0.082 196.67); /* Lighter/less saturated cyan */
+  --sidebar: oklch(0.20 0.012 239.79); /* #1c2124 */
+  --sidebar-foreground: oklch(0.81 0.011 250.49); /* #c0c5ce */
+  --sidebar-primary: oklch(0.77 0.068 151.06); /* #99c794 */
+  --sidebar-primary-foreground: oklch(0.90 0.006 258.55); /* #dfe1e8 */
+  --sidebar-accent: oklch(0.77 0.068 151.06); /* #99c794 */
+  --sidebar-accent-foreground: oklch(0.20 0.012 239.79); /* #1c2124 */
+  --sidebar-border: oklch(0.41 0.019 248.04); /* #4a5664 */
+  --sidebar-ring: oklch(0.77 0.068 151.06); /* #99c794 */
   --font-sans: Montserrat, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;

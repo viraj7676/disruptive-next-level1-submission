@@ -29,10 +29,10 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="ocean"
         enableSystem={true}
         disableTransitionOnChange
-        themes={["light", "dark", "sunset", "black"]}
+        themes={["light", "dark", "sunset", "black", "ocean"]}
       >
         <MCPProvider>
           <SidebarProvider defaultOpen={sidebarOpen} open={sidebarOpen} onOpenChange={setSidebarOpen}>

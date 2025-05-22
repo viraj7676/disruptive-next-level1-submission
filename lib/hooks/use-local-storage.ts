@@ -72,8 +72,9 @@ export function useLocalStorageMcpServers<T>(key: string, initialValue: T) {
       id: "MCP-UI-Demo",
       name: "MCP-UI Demo",
       url: "https://remote-mcp-server-authless.idosalomon.workers.dev/sse",
-      type: "sse",
+      type: "sse" as const,
       isFixed: true,
+      status: "connected" as const,
     };
 
   // Check if we're in the browser environment

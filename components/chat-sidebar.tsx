@@ -288,6 +288,21 @@ export function ChatSidebar() {
             </SidebarContent>
             
             <SidebarFooter className="p-4 border-t border-border/40 mt-auto">
+                <div className="flex flex-col gap-4 items-center">
+                    {!isCollapsed && (
+                        <p className="text-xs text-muted-foreground">
+                        Built with{" "}
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://git.new/s-mcp"
+                            className="text-primary hover:text-primary/80"
+                        >
+                            Scira Chat
+                        </a>
+                        </p>
+                    )}
+                </div>
                 <div className={`flex flex-col ${isCollapsed ? "items-center" : ""} gap-3`}>
                     <motion.div
                         whileHover={{ scale: 1.02 }}
