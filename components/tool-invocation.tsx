@@ -79,6 +79,7 @@ export const ToolInvocation = memo(function ToolInvocation({
         }
       } catch (error) {
         console.error("Failed to parse string result for HtmlResource:", error, "Input string was:", result);
+        return;
       }
     } else if (result !== null && result !== undefined) {
       console.warn("Result is not a string and not in the expected object structure:", result);
@@ -95,23 +96,16 @@ export const ToolInvocation = memo(function ToolInvocation({
           )
           .map((item) => item.resource);
 
-        setHtmlResourceContents(prevContents => {
-          const newUris = newHtmlResources.map(r => r.uri).sort();
-          const currentUris = prevContents.map(r => r.uri).sort();
-          
-          if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
-            if (newHtmlResources.length > 0 && !isExpanded) { 
-              setIsExpanded(true); 
-            }
-            return newHtmlResources;
-          }
-          return prevContents;
-        });
+        const newUris = newHtmlResources.map(r => r.uri).sort();
+        const currentUris = htmlResourceContents.map(r => r.uri).sort();
+        if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
+          setHtmlResourceContents(newHtmlResources);
+        }
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
       }
     }
-  }, [result, isExpanded]); // isExpanded is now a dependency
+  }, [result, htmlResourceContents]);
   
   const getStatusIcon = () => {
     if (state === "call") {
