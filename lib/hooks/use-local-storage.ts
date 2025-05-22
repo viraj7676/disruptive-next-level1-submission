@@ -120,7 +120,7 @@ export function useLocalStorageMcpServers<T>(key: string, initialValue: T) {
     // Always include demo server, without duplicates
     const servers = [
       demoServer,
-      ...storedValue.filter(server => server.id !== demoServer.id),
+      ...(storedValue as any[]).filter((server: any) => server.id !== demoServer.id),
     ];
   
     console.log('servers', servers);
