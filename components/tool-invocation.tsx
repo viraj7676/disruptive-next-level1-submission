@@ -63,7 +63,7 @@ export const ToolInvocation = memo(function ToolInvocation({
   const [isExpanded, setIsExpanded] = useState(false);
   const [htmlResourceContents, setHtmlResourceContents] = useState<HtmlResourceData[]>([]);
 
-  // Effect 1: Process result and update htmlResourceContents
+  // Effect: Process result, update htmlResourceContents, and auto-expand if new content
   useEffect(() => {
     let processedContainer: ParsedResultContainer | null = null;
 
@@ -98,26 +98,20 @@ export const ToolInvocation = memo(function ToolInvocation({
         setHtmlResourceContents(prevContents => {
           const newUris = newHtmlResources.map(r => r.uri).sort();
           const currentUris = prevContents.map(r => r.uri).sort();
+          
           if (JSON.stringify(newUris) !== JSON.stringify(currentUris)) {
+            if (newHtmlResources.length > 0 && !isExpanded) { 
+              setIsExpanded(true); 
+            }
             return newHtmlResources;
           }
           return prevContents;
         });
       } catch (error) {
         console.error("Error processing content for HtmlResource:", error);
-        setHtmlResourceContents(prevContents => (prevContents.length > 0 ? [] : prevContents));
       }
-    } else {
-      setHtmlResourceContents(prevContents => (prevContents.length > 0 ? [] : prevContents));
     }
-  }, [result]);
-
-  // Effect 2: Auto-expand when new resources appear and it's collapsed
-  useEffect(() => {
-    if (htmlResourceContents.length > 0 && !isExpanded) {
-      setIsExpanded(true);
-    }
-  }, [htmlResourceContents, isExpanded]);
+  }, [result, isExpanded]); // isExpanded is now a dependency
   
   const getStatusIcon = () => {
     if (state === "call") {
