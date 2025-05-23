@@ -159,7 +159,7 @@ const PurePreviewMessage = ({
               case "text":
                 return (
                   <div
-                    key={`message-${message.id}-part-${i}`}
+                    key={`message-part-${i}`}
                     className="flex flex-row gap-2 items-start w-full"
                   >
                     <div
@@ -178,7 +178,7 @@ const PurePreviewMessage = ({
                 
                 return (
                   <ToolInvocation
-                    key={`message-${message.id}-part-${i}`}
+                    key={`message-part-${i}`}
                     toolName={toolName}
                     state={state}
                     args={args}
@@ -191,7 +191,7 @@ const PurePreviewMessage = ({
               case "reasoning":
                 return (
                   <ReasoningMessagePart
-                    key={`message-${message.id}-${i}`}
+                    key={`message-${i}`}
                     // @ts-expect-error part
                     part={part}
                     isReasoning={
@@ -223,7 +223,7 @@ export const Message = memo(PurePreviewMessage, (prevProps, nextProps) => {
   if (prevProps.isLatestMessage !== nextProps.isLatestMessage) return false;
   if (prevProps.append !== nextProps.append) return false;
   if (prevProps.message.annotations !== nextProps.message.annotations) return false;
-  if (prevProps.message.id !== nextProps.message.id) return false;
+  // if (prevProps.message.id !== nextProps.message.id) return false;
   if (!equal(prevProps.message.parts, nextProps.message.parts)) return false;
   return true;
 });
