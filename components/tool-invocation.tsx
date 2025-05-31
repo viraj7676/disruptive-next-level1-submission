@@ -98,7 +98,7 @@ export const ToolInvocation = memo(function ToolInvocation({
             (item): item is ContentItemWithHtmlResource =>
               item.type === "resource" &&
               item.resource &&
-              item.resource.mimeType === "text/html"
+              item.resource.uri.startsWith("ui://")
           )
           .map((item) => item.resource);
 
