@@ -30,11 +30,11 @@ importers:
         specifier: ^0.17.0
         version: 0.17.0
       '@mcp-ui/client':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.2.0
+        version: 2.2.0
       '@mcp-ui/server':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^2.2.0
+        version: 2.2.0
       '@neondatabase/serverless':
         specifier: ^1.0.0
         version: 1.0.0
@@ -760,11 +760,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mcp-ui/client@2.1.0':
-    resolution: {integrity: sha512-jIOMGLHm4js5vcWs5+5qWL3SLTyjjN56P4OZIKL3tIO4266Aa8+NxS43Gu/OjeM8xWCNI/QbSDvGmNDZ5/l7Tg==}
+  '@mcp-ui/client@2.2.0':
+    resolution: {integrity: sha512-AJN2pguN1ZJolFtodBtMC1QMaYUiaNfrZ0UPoz8xB2+lMg5jbnskaknEG7n9JKheidzslN9xTKscvn08B6wdeQ==}
 
-  '@mcp-ui/server@1.1.0':
-    resolution: {integrity: sha512-m7YcipFnTm8VgqyxWMf52slX/ArJLJJedbzwoNPQ259TCRpF0X2D+NvN/E8JAPrIjOcv7FOdVEY+NDOpneOQ+Q==}
+  '@mcp-ui/server@2.2.0':
+    resolution: {integrity: sha512-mdWeT9qJtFpFNrhrY2okiUmTQGvweJYOl4/+Y9/nxoLp4rNrbS69cbQCbbqr4Gi8DoNVzKmYfVsJ48iVTNuu5Q==}
 
   '@modelcontextprotocol/sdk@1.12.1':
     resolution: {integrity: sha512-KG1CZhZfWg+u8pxeM/mByJDScJSrjjxLc8fwQqbsS8xCjBmQfMNEBTotYdNanKekepnfRI85GtgQlctLFpcYPw==}
@@ -4278,14 +4278,14 @@ snapshots:
   '@img/sharp-win32-x64@0.34.1':
     optional: true
 
-  '@mcp-ui/client@2.1.0':
+  '@mcp-ui/client@2.2.0':
     dependencies:
       '@modelcontextprotocol/sdk': 1.12.1
       react: 18.3.1
     transitivePeerDependencies:
       - supports-color
 
-  '@mcp-ui/server@1.1.0': {}
+  '@mcp-ui/server@2.2.0': {}
 
   '@modelcontextprotocol/sdk@1.12.1':
     dependencies:
