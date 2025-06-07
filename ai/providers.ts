@@ -73,11 +73,11 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   //   apiVersion: "gpt-4.1-mini",
   //   capabilities: ["Balance", "Creative", "Vision"]
   // },
-  "claude-4-opus": {
+  "claude-4-sonnet": {
     provider: "Anthropic",
-    name: "Claude 4 Opus",
-    description: "Latest version of Anthropic's Claude 4 Opus with strong reasoning and coding capabilities.",
-    apiVersion: "claude-opus-4-20250514",
+    name: "Claude 4 Sonnet",
+    description: "Latest version of Anthropic's Claude 4 Sonnet with strong reasoning and coding capabilities.",
+    apiVersion: "claude-sonnet-4-20250514",
     capabilities: ["Reasoning", "Efficient", "Agentic"]
   },
   "qwen-qwq": {
