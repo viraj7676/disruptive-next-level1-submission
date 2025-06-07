@@ -55,7 +55,7 @@ const groqClient = createGroq({
 
 const languageModels = {
   // "gpt-4.1-mini": openaiClient("gpt-4.1-mini"),
-  "claude-3-7-sonnet": anthropicClient('claude-3-7-sonnet-20250219'),
+  "claude-4-opus": anthropicClient('claude-opus-4-20250514'),
   "qwen-qwq": wrapLanguageModel(
     {
       model: groqClient("qwen-qwq-32b"),
@@ -73,11 +73,11 @@ export const modelDetails: Record<keyof typeof languageModels, ModelInfo> = {
   //   apiVersion: "gpt-4.1-mini",
   //   capabilities: ["Balance", "Creative", "Vision"]
   // },
-  "claude-3-7-sonnet": {
+  "claude-4-opus": {
     provider: "Anthropic",
-    name: "Claude 3.7 Sonnet",
-    description: "Latest version of Anthropic's Claude 3.7 Sonnet with strong reasoning and coding capabilities.",
-    apiVersion: "claude-3-7-sonnet-20250219",
+    name: "Claude 4 Opus",
+    description: "Latest version of Anthropic's Claude 4 Opus with strong reasoning and coding capabilities.",
+    apiVersion: "claude-opus-4-20250514",
     capabilities: ["Reasoning", "Efficient", "Agentic"]
   },
   "qwen-qwq": {
