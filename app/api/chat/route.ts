@@ -60,12 +60,9 @@ export async function POST(req: Request) {
 
     If tools are not available, say you don't know or if the user wants a tool they can add one from the server icon in bottom left corner in the sidebar.
 
-    You can use multiple tools in a single response.
     Always respond after using the tools for better user experience.
-    You can run multiple steps using all the tools!!!!
     Make sure to use the right tool to respond to the user's question.
-
-    Multiple tools can be used in a single response and multiple steps can be used to answer the user's question.
+    Use only one tool at a time. If you need to use multiple tools, use the tool that is most relevant to the user's question.
 
     ## Response Format
     - Markdown is supported.
