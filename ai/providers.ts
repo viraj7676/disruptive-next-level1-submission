@@ -55,7 +55,7 @@ const groqClient = createGroq({
 
 const languageModels = {
   // "gpt-4.1-mini": openaiClient("gpt-4.1-mini"),
-  "claude-4-opus": anthropicClient('claude-opus-4-20250514'),
+  "claude-4-sonnet": anthropicClient('claude-sonnet-4-20250514'),
   "qwen-qwq": wrapLanguageModel(
     {
       model: groqClient("qwen-qwq-32b"),
