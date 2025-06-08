@@ -410,7 +410,7 @@ export function ChatSidebar() {
                                 </DropdownMenuItem> */}
                                 <DropdownMenuItem onSelect={(e) => {
                                     e.preventDefault();
-                                    window.open("https://github.com/idosalomon/scira-mcp-ui-chat", "_blank");
+                                    window.open("https://github.com/idosal/scira-mcp-ui-chat", "_blank");
                                 }}>
                                     <Github className="mr-2 h-4 w-4 hover:text-sidebar-accent" />
                                     GitHub
